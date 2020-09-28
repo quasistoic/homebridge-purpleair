@@ -146,7 +146,7 @@ PurpleAirAccessory.prototype = {
 		this.temperature.updateCharacteristic(Characteristic.CurrentTemperature, tempC);
 		this.humidity.updateCharacteristic(Characteristic.CurrentRelativeHumidity, hum);
 
-		this.log.info("PurpleAir %s pm2_5 is %s, pm10 is %s, AQI is %s, Air Quality is %s. Temperature is %sC. Humidity is %s%%",
+		this.log.debug("PurpleAir %s pm2_5 is %s, pm10 is %s, AQI is %s, Air Quality is %s. Temperature is %sC. Humidity is %s%%",
 			this.statsKey, pm2_5.toString(), pm10.toFixed(2), aqi.toString(), this.airQualityString(aqi), tempC.toFixed(1), hum.toFixed(1));
 	},
 
