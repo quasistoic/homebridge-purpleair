@@ -93,11 +93,8 @@ PurpleAirAccessory.prototype = {
 
 		// PurpleAir outdoor sensors send data from two internal sensors, but indoor sensors only have one
 		// We have to verify exterior/interior, and if exterior, whether both sensors are working or only 1
-		var statsA;
-		var statsB = { lastModified: 0 };
 		var dataA;
 		var dataB;
-		var newest = 0;
 
 		// Basic sanity check
 		if (!data.results || !data.results[0] || !data.results[0].Stats) {
@@ -105,30 +102,41 @@ PurpleAirAccessory.prototype = {
 		}
 
 		dataA = data.results[0];
-		statsA = JSON.parse(dataA.Stats);
 		if (data.results[1] && data.results[1].Stats && data.results[0].DEVICE_LOCATIONTYPE !== 'inside') {
 			dataB = data.results[1];
-			statsB = JSON.parse(dataB.Stats);
 		}
 
-		newest = Math.max(statsA.lastModified, statsB.lastModified);
+		// Select only valid data
+		if (dataA.Flag == 1) {
+			dataA = undefined;
+		}
+		if (dataB.Flag == 1) {
+			dataB = undefined;
+		}
+
+		// No valid data
+		if (!dataA && !dataB) {
+			return;
+		}
+		// Make sure dataA and dataB are both valid (but can be copies)
+		if (!dataA) {
+			dataA = dataB;
+		}
+		if (!dataB) {
+			dataB = dataA;
+		}
+
+		var statsA = JSON.parse(dataA.Stats);
+		var statsB = JSON.parse(dataB.Stats);
+
+		var newest = Math.max(statsA.lastModified, statsB.lastModified);
 		if (newest <= this.lastupdate) {
 			return;
 		}
 		this.lastupdate = newest;
 
-		var va = statsA[this.statsKey];
-		var vb = statsB[this.statsKey];
-		if (va && vb) {
-			va = (va + vb) / 2;
-		}
-		else if (!va) {
-			va = vb || 0;
-		}
-		var pm10 = parseFloat(dataA.pm10_0_atm);
-		if (dataB) {
-			pm10 = (pm10 + parseFloat(dataB.pm10_0_atm)) / 2;
-		}
+		var va = (statsA[this.statsKey] + statsB[this.statsKey]) / 2;
+		var pm10 = (parseFloat(dataA.pm10_0_atm) + parseFloat(dataB.pm10_0_atm)) / 2;
 
 		var tempC = (parseFloat(dataA.temp_f) - 32) * 5 / 9;
 		var hum = parseFloat(dataA.humidity);
