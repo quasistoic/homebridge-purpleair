@@ -110,7 +110,7 @@ PurpleAirAccessory.prototype = {
 		if (dataA.Flag == 1) {
 			dataA = undefined;
 		}
-		if (dataB.Flag == 1) {
+		if (dataB && dataB.Flag == 1) {
 			dataB = undefined;
 		}
 
