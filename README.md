@@ -24,11 +24,11 @@ Example config.json
     {
           "accessory": "PurpleAir",
           "purpleID": "PURPLE_AIR_STATION_ID",
-          "updateFreq": MIN_SECS_BETWEEN_API_READ,
+          "updateFreq": 90,
           "name": "PurpleAir Air Quality",
-          "statsKey": "Stats key to use to select appropriate PM2.5 value",
-          "adjust": "PM2.5 Adjustment algorithm",
-          "includePM10": "True to include PM10 measurement in AQI calculation"
+          "statsKey": "v",
+          "adjust": "NONE",
+          "includePM10": true
     }
 ]
 ```
@@ -41,7 +41,7 @@ Fields:
 - `name` Is the name of accessory (required).
 - `statsKey` Selects the key from the sensor to report. The sensor reports various time based averages which can be selected. These are: v (real time), v1 (10 minute average), v2 (30 minute average), v3 (1 hour average), v4 (6 hour average), v5 (24 hour average), v6 (1 week average).
 - `adjust` Adjust the raw PM2.5 value based on various algorithms. These are: NONE (raw values), EPA, LRAPA and AQANDU.
-- `includePM10` Include PM10 measurements in the AQI calculation. The highest AQI calculated from PM2.5 and PM10 will be used to calculate the air quality. The AQI calculations from PM2.5 and PM10 are not the same.
+- `includePM10` Include PM10 measurements in the AQI calculation. The highest AQI calculated from PM2.5 and PM10 will be used to calculate the air quality. The AQI calculations from PM2.5 and PM10 are not the same. Value should be a literal true or false, not string quoted.
 
 To find your specific "PURPLE_AIR_STATION_ID" (a string):
 1. Use the PurpleAir Map to locate a station (https://www.purpleair.com/map)
