@@ -101,6 +101,12 @@ PurpleAirAccessory.prototype = {
 			return;
 		}
 
+		// Copy over environ in case the rest of dataA is faulty
+		if (dataA && dataB) {
+			dataB.humidity = dataA.humidity;
+			dataB.temp_f = dataA.temp_f;
+		}
+
 		dataA = data.results[0];
 		if (data.results[1] && data.results[1].Stats && data.results[0].DEVICE_LOCATIONTYPE !== 'inside') {
 			dataB = data.results[1];
