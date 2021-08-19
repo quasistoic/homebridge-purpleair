@@ -141,7 +141,7 @@ PurpleAirAccessory.prototype = {
 		var tempC = (parseFloat(dataA.temp_f) - 32) * 5 / 9;
 		var hum = parseFloat(dataA.humidity);
 
-		var pm2_5 = this.adjustPM(va, hum);
+		var pm2_5 = isNaN(hum) ? va : this.adjustPM(va, hum);
 		var aqi = this.calculateAQI2_5(pm2_5);
 		if (this.includePM10) {
 			// If we include PM10 measurements in the AQI, we select the highest of the two
