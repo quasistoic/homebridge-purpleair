@@ -43,6 +43,7 @@ function PurpleAirAccessory(log, config) {
 			break;
 	}
 	this.lastupdate = 0;
+	this.allowFlaggedData = config.allowFlaggedData;
 
 	this.updateFreq = config.updateFreq;
 	if (!this.updateFreq) {
@@ -112,12 +113,14 @@ PurpleAirAccessory.prototype = {
 			dataB = data.results[1];
 		}
 
-		// Select only valid data
-		if (dataA.Flag == 1) {
-			dataA = undefined;
-		}
-		if (dataB && dataB.Flag == 1) {
-			dataB = undefined;
+		// Select only valid data unless explicitly allowed
+		if (!this.allowFlaggedData) {
+			if (dataA.Flag == 1) {
+				dataA = undefined;
+			}
+			if (dataB && dataB.Flag == 1) {
+				dataB = undefined;
+			}
 		}
 
 		// No valid data
